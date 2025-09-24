@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เครื่องมือเคมีครบชุด</title>
+  <style>
+    body { font-family: sans-serif; background: #f5f5f5; margin: 0; }
+    .container { display: flex; padding: 10px; gap: 20px; }
+
+    /* ตารางธาตุ */
+    .periodic-table {
+      width: 300px;
+      max-height: 95vh;
+      overflow: auto;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px;
+      position: sticky;
+      top: 10px;
+    }
+    .periodic-table img {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+    }
+
+    /* เครื่องมือ */
+    .tool-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .calculator-container, .image-container {
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #fff;
+    }
+    h1, h2 { margin: 0 0 10px 0; text-align: center; }
+    label { display: block; margin-top: 10px; }
+    input, select, button { margin-top: 5px; width: 100%; padding: 6px; }
+    .result-box { margin-top: 10px; padding: 12px; border: 1px solid #ddd; border-radius: 6px; background: #f9f9f9; }
+    .image-container img { width: 100%; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ตารางธาตุ -->
+    <div class="periodic-table">
+      <h2>ตารางธาตุ</h2>
+      <img src="file:///D:/Users/BaiPhi/Downloads/โครงงาน/img/periodic-table-printable.png" alt="Periodic Table">
+    </div>
+
+    <!-- เครื่องมือ -->
+    <div class="tool-container">
+
+      <!-- เครื่องคิดเลขเคมี -->
+      <div class="calculator-container">
+        <h1>🔬 เครื่องคิดเลขเคมี</h1>
+        <label for="mode-selector">เลือกหมวด:</label>
+        <select id="mode-selector" onchange="updateMode()">
+          <option value="mol">คำนวณ mol</option>
+          <option value="dilution">การเจือจางสารละลาย</option>
+        </select>
+        <div id="mode-fields"></div>
+        <button onclick="calculate()">คำนวณ</button>
+        <div class="result-box">
+          <h2>ผลลัพธ์</h2>
+          <p id="result-display">ผลลัพธ์จะแสดงที่นี่</p>
+        </div>
+      </div>
+
+      <!-- รูปตัวอย่างตรงนี้ -->
+      <div class="image-container">
+        <h1>รูปตัวอย่าง</h1>
+        <img src="file:///D:/Users/BaiPhi/Downloads/โครงงาน/img/periodic-table-printable.png" alt="Your Image">
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const modeFields = document.getElementById("mode-fields");
+    const resultDisplay = document.getElementById("result-display");
+
+    function updateMode() {
+      let mode = document.getElementById("mode-selector").value;
+      let html = "";
+
+      if (mode === "mol") {
+        html = `
+          <label for="formula-selector">เลือกสูตร mol:</label>
+          <select id="formula-selector" onchange="updateMolInputs()">
+            <option value="mol1">mol = g / M.W.</option>
+            <option value="mol2">mol = Vdm³ / 22.4</option>
+            <option value="mol3">mol = Vcm³ / 22400</option>
+            <option value="mol4">mol = M·Vcm³ / 1000</option>
+            <option value="mol5">mol = M·Vdm³</option>
+          </select>
+          <div id="mol-inputs"></div>
+        `;
+      } else if (mode === "dilution") {
+        html = `
+          <label for="formula-selector">เลือกสูตรการเจือจาง:</label>
+          <select id="formula-selector" onchange="updateDilutionInputs()">
+            <option value="m1v1_m2v2">M1V1 = M2V2</option>
+            <option value="multi_dilution">MรวมVรวม = M1V1 + M2V2 + ...</option>
+          </select>
+          <div id="dilution-inputs"></div>
+        `;
+      }
+      modeFields.innerHTML = html;
+      if (mode === "mol") updateMolInputs();
+      else if (mode === "dilution") updateDilutionInputs();
+    }
+
+    function updateMolInputs() {
+      let formula = document.getElementById("formula-selector").value;
+      let html = "";
+      if (formula === "mol1") html = `<label>กรัม (g): <input type="number" id="g"></label><label>M.W.: <input type="number" id="mw"></label>`;
+      else if (formula === "mol2") html = `<label>Vdm³: <input type="number" id="vdm"></label>`;
+      else if (formula === "mol3") html = `<label>Vcm³: <input type="number" id="vcm"></label>`;
+      else if (formula === "mol4") html = `<label>M: <input type="number" id="M"></label><label>Vcm³: <input type="number" id="vcm"></label>`;
+      else if (formula === "mol5") html = `<label>M: <input type="number" id="M"></label><label>Vdm³: <input type="number" id="vdm"></label>`;
+      document.getElementById("mol-inputs").innerHTML = html;
+    }
+
+    function updateDilutionInputs() {
+      let formula = document.getElementById("formula-selector").value;
+      let html = "";
+      if (formula === "m1v1_m2v2") {
+        html = `<label>M1: <input type="number" id="M1"></label><label>V1: <input type="number" id="V1"></label>
+                <label>M2: <input type="number" id="M2"></label><label>V2: <input type="number" id="V2"></label>
+                <p>⚡ ปล่อยว่าง 1 ช่อง ระบบคำนวณค่านั้น</p>`;
+      } else if (formula === "multi_dilution") {
+        html = `<div id="multi-container"><div class="set"><label>M1: <input type="number" class="M"></label><label>V1: <input type="number" class="V"></label></div></div>
+                <button type="button" onclick="addSet()">+ เพิ่มชุด</button><label>Vรวม: <input type="number" id="Vsum"></label>`;
+      }
+      document.getElementById("dilution-inputs").innerHTML = html;
+    }
+
+    function addSet() {
+      const container = document.getElementById("multi-container");
+      const div = document.createElement("div");
+      div.className = "set";
+      div.innerHTML = `<label>M: <input type="number" class="M"></label><label>V: <input type="number" class="V"></label>`;
+      container.appendChild(div);
+    }
+
+    function calculate() {
+      let mode = document.getElementById("mode-selector").value;
+      let result = "";
+      if (mode === "mol") {
+        let formula = document.getElementById("formula-selector").value;
+        let mol = NaN;
+        if (formula === "mol1") { let g=parseFloat(document.getElementById("g").value), mw=parseFloat(document.getElementById("mw").value); if(!isNaN(g)&&!isNaN(mw)&&mw!==0) mol=g/mw; }
+        else if (formula==="mol2"){ let vdm=parseFloat(document.getElementById("vdm").value); if(!isNaN(vdm)) mol=vdm/22.4;}
+        else if (formula==="mol3"){ let vcm=parseFloat(document.getElementById("vcm").value); if(!isNaN(vcm)) mol=vcm/22400;}
+        else if (formula==="mol4"){ let M=parseFloat(document.getElementById("M").value), vcm=parseFloat(document.getElementById("vcm").value); if(!isNaN(M)&&!isNaN(vcm)) mol=(M*vcm)/1000;}
+        else if (formula==="mol5"){ let M=parseFloat(document.getElementById("M").value), vdm=parseFloat(document.getElementById("vdm").value); if(!isNaN(M)&&!isNaN(vdm)) mol=M*vdm;}
+        result = isNaN(mol)?"⚠️ กรุณากรอกค่าตัวเลขให้ครบ":"mol = "+mol.toFixed(6);
+      }
+      else if(mode==="dilution"){
+        let formula=document.getElementById("formula-selector").value;
+        if(formula==="m1v1_m2v2"){
+          let M1=parseFloat(document.getElementById("M1").value),V1=parseFloat(document.getElementById("V1").value),M2=parseFloat(document.getElementById("M2").value),V2=parseFloat(document.getElementById("V2").value);
+          let emptyCount=[M1,V1,M2,V2].filter(v=>isNaN(v)).length;
+          if(emptyCount!==1) result="⚠️ กรุณาปล่อยว่างไว้ 1 ช่องเพื่อหาค่า";
+          else { if(isNaN(M1)) M1=(M2*V2)/V1; else if(isNaN(V1)) V1=(M2*V2)/M1; else if(isNaN(M2)) M2=(M1*V1)/V2; else if(isNaN(V2)) V2=(M1*V1)/M2;
+            result=`ผลลัพธ์: M1=${M1||"-"}, V1=${V1||"-"}, M2=${M2||"-"}, V2=${V2||"-"}` }
+        }
+        else if(formula==="multi_dilution"){
+          let M=[...document.querySelectorAll(".M")].map(e=>parseFloat(e.value)), V=[...document.querySelectorAll(".V")].map(e=>parseFloat(e.value)), Vsum=parseFloat(document.getElementById("Vsum").value);
+          if(M.some(isNaN)||V.some(isNaN)||isNaN(Vsum)) result="⚠️ กรุณากรอกค่าให้ครบทุกช่อง";
+          else { let sumMV=0; for(let i=0;i<M.length;i++) sumMV+=M[i]*V[i]; let Mfinal=sumMV/Vsum; result=`Mรวม = ${Mfinal.toFixed(6)}`; }
+        }
+      }
+      resultDisplay.textContent=result;
+    }
+
+    // เริ่มต้น
+    updateMode();
+  </script>
+</body>
+</html>
