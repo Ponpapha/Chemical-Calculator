@@ -62,16 +62,12 @@
             }
         }
 
-        /* ⚡ ยืนยันให้ h1 และ h2 อยู่กึ่งกลางเสมอ */
+        /* ยืนยันให้ h1 และ h2 อยู่กึ่งกลางเสมอ */
         h1, h2 { 
             margin: 0 0 10px 0; 
             text-align: center; 
         }
-        /* ⚡ เพิ่มความเฉพาะเจาะจงให้ h1 ใน image-container */
-        .image-container h1 {
-            text-align: center;
-        }
-        /* ------------------------------------------------------------- */
+        /* ลบ selector สำหรับ h1 ใน image-container ออกเพราะเราลบ h1 แล้ว */
         
         label { display: block; margin-top: 10px; }
         input, select, button { margin-top: 5px; width: 100%; padding: 6px; }
@@ -112,7 +108,7 @@
         </div>
 
         <div class="image-container">
-            <h1>ตารางธาตุ</h1> <img src="https://koratchemistry.wordpress.com/wp-content/uploads/2015/10/periodic-table-printable.png" alt="Periodic Table">
+            <img src="https://koratchemistry.wordpress.com/wp-content/uploads/2015/10/periodic-table-printable.png" alt="Periodic Table">
         </div>
 
     </div>
