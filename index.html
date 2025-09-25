@@ -42,7 +42,7 @@
             border: 1px solid #ccc;
             border-radius: 10px;
             background: #fff;
-            text-align: center; /* จัดกึ่งกลางเนื้อหาภายใน รวมถึง h1 ด้วย */
+            text-align: center; /* จัดกึ่งกลางเนื้อหาภายใน */
             overflow-x: auto; 
         }
         
@@ -62,10 +62,14 @@
             }
         }
 
-        /* ⚡ การแก้ไข: ยืนยันให้ h1 และ h2 อยู่กึ่งกลางเสมอ */
+        /* ⚡ ยืนยันให้ h1 และ h2 อยู่กึ่งกลางเสมอ */
         h1, h2 { 
             margin: 0 0 10px 0; 
             text-align: center; 
+        }
+        /* ⚡ เพิ่มความเฉพาะเจาะจงให้ h1 ใน image-container */
+        .image-container h1 {
+            text-align: center;
         }
         /* ------------------------------------------------------------- */
         
